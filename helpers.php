@@ -52,6 +52,9 @@ class MigrationSeederHelper
                 case 'datetime':
                     $migrationContent .= "dateTime('$columnName')";
                     break;
+                case 'date':
+                    $migrationContent .= "date('$columnName')";
+                    break;
                 case 'smalldatetime':
                     $migrationContent .= "dateTime('$columnName')";
                     break;
@@ -82,10 +85,14 @@ class MigrationSeederHelper
                 case 'uniqueidentifier':
                     $migrationContent .= "uuid('$columnName')";
                     break;
+                default: dd($columnName);
+                    break;
             }
 
             if ($isNullable === 'NO') {
-                $migrationContent .= "->nullable(false)";
+                $migrationContent .= "";
+            } else {
+                $migrationContent .= "->nullable()";
             }
 
             $migrationContent .= ";\n";
@@ -135,8 +142,8 @@ class MigrationSeederHelper
         $username = $database['username'];
         $password = $database['password'];
 		
-        $migrationFolder = 'migration/' . $databaseName;
-        $seederFolder = 'seeder/' . $databaseName;
+        $migrationFolder = 'migrations/' . $databaseName;
+        $seederFolder = 'seeds/' . $databaseName;
 
         // Check if migration folder exists, create if not
         if (!is_dir($migrationFolder)) {
